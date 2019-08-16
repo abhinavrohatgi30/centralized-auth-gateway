@@ -10,12 +10,18 @@ server:
 ribbon:
   eureka:
     enabled: false
-      
+
+zuul:
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Access-Control-Expose-Headers, Access-Control-Allow-Methods
+  ignore-security-headers: true
+  routes:
+    recruiter-service:
+      path: /test/endpoint/v0/**
+      serviceId: http://test.endpoint/test/endpoint/v0/
+    agent-service:
+      path: /test/endpoint/v1/**
+      serviceId: http://test.endpoint/test/endpoint/v1/
     
 eureka:
   client:
-    enabled: false
-  
-  
-zuul:
-  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Access-Control-Expose-Headers, Access-Control-Allow-Methods
+    enabled: false  

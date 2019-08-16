@@ -6,3 +6,9 @@ authorization:
       urlClaim: /test/:userId
     - urlPattern: /test/[0-9]*/ping
       urlClaim: /test/:userId/ping
+  - route: /test/endpoint/v1
+    claims:
+    - urlPattern: /test/v1/[0-9]*
+      urlClaim: /test/v1/:userId
+    - urlPattern: /test/[0-9]*/pong
+      urlClaim: /test/:userId/pong
