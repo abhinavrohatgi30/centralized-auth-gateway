@@ -15,12 +15,26 @@ The Filter performs the following actions :
 
 
 ## Authorization Filter
-The Authentication filter is the first filter that runs in the filter chain. As the name suggests it provides an authorization layer by validating the claims set by the Authentication Filter into the request context. It performs 2 mandatory validations and one optional validation :
 
-1. Valid Route
-2. Url Claim
-3. UserRole Claim (Optional)
+The Authentication filter is the first filter that runs in the filter chain. As the name suggests it provides an authorization layer by validating the claims set by the Authentication Filter into the request context. 
+
+The properties are configured in a property file called <strong>authorization.yml</strong> which captures the user defined validations to be processed and in order to perform these validations in an optimized way, it creates a URL Pattern Tree which is basically a tree made up of nodes that represent the path/patterns of the url at different levels, these levels are formed by splitting the url patterns by '/'. Every node that represents a url pattern is designated as a url node.
+
+It performs 2 mandatory validations and one optional validation :
+
+1. Valid Url Pattern
+2. Valid Url Claim
+3. Valid User Role (Optional)
 
 
+  ### Valid URL Pattern
+  The URL Pattern Tree formed above is used to validate if a request matches any valid url pattern. If the tree contains a url pattern node that matches the request it returns a valid response and performs the url claim validation, else it throws an exception indicating an <strong>Invalid Route</strong>.
+
+  ### Valid URL Claim
+  The URL Pattern once validated then is checked for claims in the pattern, the user can denote one of the path parameters in the request to match one of the jwt claims. This is achieved by finding out the part of the url that is designated as a claim (identified by the string :claim_name) and then substituting it with the claim value and checking for equality with the path in the request. If the url claim is found to be valid the request is allowed to proceed further, else an exception is thrown that specifies that the url claim was invalid.
+
+  ### Valid User Role Claim
+  This is an optional validation and is performed after the url claim validation, here the user can designate if the url pattern can only be requested by certain role/roles. If so, we validate the userRole claim against the list of claims/claim denoted by the user for the specific url pattern. If found to be valid the request is allowed to proceed further, else an exception is thrown that specifies that the userRole was not allowed.
 
 
+If all the above validations succeed the request is allowed to proceed further in the filter chain and is reverse proxied to the designated zuul route that matches the request.
