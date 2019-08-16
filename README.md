@@ -43,6 +43,7 @@ If all the above validations succeed the request is allowed to proceed further i
 
 ## Playing Around with the Gateway
 
+Start the Application by building it using Maven and then running the application, the application by default runs on port 8082.
 To Play around with the gateway one can make use of the inbuilt endpoint to generate a token by providing a userRole, userId and a userType and generate an access token for the subsequent requests. You can use the following command to do the same : 
 
 ```
