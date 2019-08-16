@@ -15,33 +15,29 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.github.abhinavrohatgi30.models.UserInfoDTO;
+import com.github.abhinavrohatgi30.service.JWTService;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 
+@Component
 public class AuthenticationFilter extends ZuulFilter{
 
-	private static final String ISSUER_NAME = "Abhinav Rohatgi";
-	private static Algorithm algorithm;
+	@Autowired
+	private JWTService jwtService;
 	
-	static {
-		algorithm = Algorithm.none();
-	}
-
 	@Override
 	public boolean shouldFilter() {
 		final RequestContext requestContext = RequestContext.getCurrentContext();
 		HttpServletRequest request = requestContext.getRequest();
-		return !(HttpMethod.OPTIONS.name().equals(request.getMethod()));
+		return !(request.getRequestURI().startsWith("/token"));
 	}
 
 	@Override
@@ -50,7 +46,7 @@ public class AuthenticationFilter extends ZuulFilter{
 		HttpServletRequest request = requestContext.getRequest();
 		Optional<String> authorizationHeader = Optional.ofNullable(request.getHeader("Authorization"));
 		Optional<String> authorizationToken = authorizationHeader.map(AuthenticationFilter::getTokenFromAuthorizationHeader);
-		Optional<DecodedJWT> decodedToken = authorizationToken.map(AuthenticationFilter::verifyToken);
+		Optional<DecodedJWT> decodedToken = authorizationToken.map(jwtService::verifyToken);
 		if (decodedToken.isPresent()) {
 			DecodedJWT decodedAT = decodedToken.get();
 			Date expirationTime = decodedAT.getExpiresAt();
@@ -91,16 +87,5 @@ public class AuthenticationFilter extends ZuulFilter{
 		final String userRole = payloadObject.getString(USER_ROLE_CLAIM);
 
 		return new UserInfoDTO(userId, userType, userRole);
-	}
-	
-	public static DecodedJWT verifyToken(String token) {
-		final JWTVerifier jwtVerifier = JWT.require(algorithm).withIssuer(ISSUER_NAME).build();
-
-		try {
-			return jwtVerifier.verify(token);
-		} catch (JWTVerificationException exception) {
-			exception.printStackTrace();
-		}
-		return null;
 	}
 }

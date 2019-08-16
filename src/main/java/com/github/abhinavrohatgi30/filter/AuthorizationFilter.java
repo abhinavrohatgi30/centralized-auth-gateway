@@ -48,7 +48,6 @@ public class AuthorizationFilter extends ZuulFilter{
 
 	private void addClaimsToRequestAsHeaders(RequestContext requestContext) {
 		requestContext.addZuulRequestHeader(USER_ID_CLAIM,requestContext.get(USER_ID_CLAIM).toString());
-		requestContext.addZuulRequestHeader(AGENT_ID_CLAIM,requestContext.get(AGENT_ID_CLAIM).toString());
 		requestContext.addZuulRequestHeader(USER_ROLE_CLAIM,requestContext.get(USER_ROLE_CLAIM).toString());
 		requestContext.addZuulRequestHeader(USER_TYPE_CLAIM,requestContext.get(USER_TYPE_CLAIM).toString());
 	}

@@ -17,10 +17,10 @@ zuul:
   routes:
     recruiter-service:
       path: /test/endpoint/v0/**
-      serviceId: http://test.endpoint/test/endpoint/v0/
+      serviceId: forward:/test/endpoint/v0/
     agent-service:
       path: /test/endpoint/v1/**
-      serviceId: http://test.endpoint/test/endpoint/v1/
+      serviceId: forward:/test/endpoint/v1/
     
 eureka:
   client:

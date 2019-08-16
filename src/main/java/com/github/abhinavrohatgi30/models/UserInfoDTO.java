@@ -1,4 +1,4 @@
-package com.github.abhinavrohatgi30.filter;
+package com.github.abhinavrohatgi30.models;
 
 public class UserInfoDTO {
 	

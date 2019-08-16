@@ -2,6 +2,7 @@ package com.github.abhinavrohatgi30.filter;
 
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 import static com.github.abhinavrohatgi30.constants.FilterConstants.*;
 
@@ -9,6 +10,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 
+@Component
 public class ZuulExceptionResponseMappingFilter extends ZuulFilter{
 
 	@Override
