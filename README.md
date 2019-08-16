@@ -38,3 +38,35 @@ It performs 2 mandatory validations and one optional validation :
 
 
 If all the above validations succeed the request is allowed to proceed further in the filter chain and is reverse proxied to the designated zuul route that matches the request.
+
+
+
+## Playing Around with the Gateway
+
+To Play around with the gateway one can make use of the inbuilt endpoint to generate a token by providing a userRole, userId and a userType and generate an access token for the subsequent requests. You can use the following command to do the same : 
+
+```
+curl -X POST \
+  http://localhost:8082/token/generate \
+  -H 'Content-Type: application/json' \
+  -d '{
+	"userId":1,
+	"userType":"regular",
+	"userRole":"regular"
+}'
+```
+You can then use this token as shown below in the subsequent requests :
+
+```
+curl -X GET \
+  http://localhost:8082/test/endpoint/v0/test/1/ping \
+  -H 'Authorization: Bearer ACCESS_TOKEN_HERE'
+```
+
+You can validate the following scenarios: 
+1. Invalid Token Signature
+2. Expired Token
+3. Invalid URL Pattern
+4. Invalid URL Claim
+5. Invalid User Role
+
