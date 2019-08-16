@@ -16,7 +16,7 @@ The Filter performs the following actions :
 
 ## Authorization Filter
 
-The Authentication filter is the first filter that runs in the filter chain. As the name suggests it provides an authorization layer by validating the claims set by the Authentication Filter into the request context. 
+The Authorization filter is the second filter that runs in the filter chain. As the name suggests it provides an authorization layer by validating the claims set by the Authentication Filter into the request context. 
 
 The properties are configured in a property file called <strong>authorization.yml</strong> which captures the user defined validations to be processed and in order to perform these validations in an optimized way, it creates a URL Pattern Tree which is basically a tree made up of nodes that represent the path/patterns of the url at different levels, these levels are formed by splitting the url patterns by '/'. Every node that represents a url pattern is designated as a url node.
 
